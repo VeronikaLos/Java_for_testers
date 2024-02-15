@@ -12,8 +12,8 @@ public class Triangle {
     }
 
     public double area() {
-        var p = (a + b + c) / 2;
-        var d = Math.sqrt(p * (p - a) * (p - b) * (p - c));
+        var p = perimeter()/2;
+        var d = Math.sqrt(p * (p - a) * (p - b) * (p- c));
         return d;
     }
 

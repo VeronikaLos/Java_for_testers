@@ -2,7 +2,7 @@ package ru.stga.geometry.figures;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class SquareTests {
+public class TriangleTests {
 
     @Test
      void canCalculateArea() {
