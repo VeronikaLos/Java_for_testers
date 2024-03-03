@@ -37,7 +37,10 @@ public class ContactHelper extends HelperBase {
         type(By.name("title"), contact.title());
         type(By.name("company"), contact.company());
         type(By.name("address"), contact.address());
-        type(By.name("address"), contact.address());
+        type(By.name("home"), contact.homeTelephone());
+        type(By.name("mobile"), contact.mobileTelephone());
+        type(By.name("work"), contact.workTelephone());
+        type(By.name("fax"), contact.faxTelephone());
         type(By.name("email"), contact.email());
         type(By.name("email2"), contact.email2());
         type(By.name("email3"), contact.email3());
@@ -63,6 +66,11 @@ public class ContactHelper extends HelperBase {
 
     private void removeSelectedGroup() {
         click(By.xpath("//input[@value='Delete']"));
+    }
+
+    public int getCount() {
+        openHomePage();
+        return manager.driver.findElements(By.name("selected[]")).size();
     }
 }
 

@@ -1,12 +1,12 @@
 package model;
 
-public record ContactData(String firstName, String middleName, String lastName, String nickname, String title,
-                          String company,
-                          String address, String homeTelephone, String mobileTelephone, String workTelephone,
-                          String faxTelephone,
+public record ContactData(String firstName, String middleName, String lastName, String nickname, String title, String company, String address,
+                          String homeTelephone, String mobileTelephone, String workTelephone, String faxTelephone,
                           String email, String email2, String email3, String homePage) {
     public ContactData() {
-        this("", "", "", "", "", "", "", "", "", "", "", "", "", "", "");
+        this("", "", "", "", "", "", "",
+                "", "", "", "",
+                "", "", "", "");
     }
 
     public ContactData withName(String name) {
