@@ -2,7 +2,6 @@ package tests;
 
 import manager.ApplicationManager;
 import org.junit.jupiter.api.BeforeEach;
-
 import java.util.Random;
 
 public class TestBase {
