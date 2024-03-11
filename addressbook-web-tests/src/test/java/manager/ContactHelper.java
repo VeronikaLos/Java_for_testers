@@ -37,17 +37,13 @@ public class ContactHelper extends HelperBase {
     private void submitContactModification() {
         click(By.name("update"));
     }
+
     private void selectContact(ContactData contact) {
         click(By.cssSelector(String.format("input[value='%s']", contact.id())));
     }
 
-    //a[href='edit.php?id=148']
     private void initContactModification(ContactData contact) {
         click(By.cssSelector(String.format("a[href*='edit.php?id=%s']", contact.id())));
-        //manager.driver.findElement(By.linkText("edit.php?id="+contact.id())).findElement(By.xpath("//img[@alt='Edit']")).click();
-        //manager.driver.findElement(By.cssSelector("img[src='icons/pencil.png");
-        //manager.driver.findElement(By.xpath(" //a[contains(text(),'edit.php?id=')]")).click();
-
     }
 
     private void returnHomePage() {
@@ -87,7 +83,6 @@ public class ContactHelper extends HelperBase {
     private void openHomePage() {
         click(By.linkText("home"));
     }
-
 
 
     private void removeSelectedGroup() {
