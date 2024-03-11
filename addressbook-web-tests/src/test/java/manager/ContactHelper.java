@@ -1,7 +1,6 @@
 package manager;
 
 import model.ContactData;
-import model.GroupData;
 import org.openqa.selenium.By;
 
 import java.util.ArrayList;
@@ -21,9 +20,34 @@ public class ContactHelper extends HelperBase {
 
     public void removeContact(ContactData contact) {
         openHomePage();
-        selectGroup(contact);
+        selectContact(contact);
         removeSelectedGroup();
         openHomePage();
+    }
+
+    public void modifyContact(ContactData contact, ContactData modifiedContact) {
+        openHomePage();
+        selectContact(contact);
+        initContactModification(contact);
+        fillContactForm(modifiedContact);
+        submitContactModification();
+        returnHomePage();
+    }
+
+    private void submitContactModification() {
+        click(By.name("update"));
+    }
+    private void selectContact(ContactData contact) {
+        click(By.cssSelector(String.format("input[value='%s']", contact.id())));
+    }
+
+    //a[href='edit.php?id=148']
+    private void initContactModification(ContactData contact) {
+        click(By.cssSelector(String.format("a[href*='edit.php?id=%s']", contact.id())));
+        //manager.driver.findElement(By.linkText("edit.php?id="+contact.id())).findElement(By.xpath("//img[@alt='Edit']")).click();
+        //manager.driver.findElement(By.cssSelector("img[src='icons/pencil.png");
+        //manager.driver.findElement(By.xpath(" //a[contains(text(),'edit.php?id=')]")).click();
+
     }
 
     private void returnHomePage() {
@@ -64,10 +88,7 @@ public class ContactHelper extends HelperBase {
         click(By.linkText("home"));
     }
 
-    private void selectGroup(ContactData contact) {
-        click(By.cssSelector(String.format("input[value='%s']", contact.id())));
-        //click(By.name("selected[]"));
-    }
+
 
     private void removeSelectedGroup() {
         click(By.xpath("//input[@value='Delete']"));
@@ -79,14 +100,14 @@ public class ContactHelper extends HelperBase {
     }
 
     public List<ContactData> getContactList() {
+        openHomePage();
         var contacts = new ArrayList<ContactData>();
         var tds = manager.driver.findElements(By.name("entry"));
-        ;
         for (var td : tds) {
             var checkbox = td.findElement(By.className("center")).findElement(By.name("selected[]"));
+            var name = td.findElement(By.cssSelector("td:nth-child(3)")).getText();
+            var lastName = td.findElement(By.cssSelector("td:nth-child(2)")).getText();
             var id = checkbox.getAttribute("value");
-            var name = td.findElement(By.xpath("//td[3]")).getText(); //??
-            var lastName = td.findElement(By.xpath("//td[2]")).getText(); //??
             contacts.add(new ContactData().withId(id).withName(name).withLastName(lastName));
         }
         return contacts;

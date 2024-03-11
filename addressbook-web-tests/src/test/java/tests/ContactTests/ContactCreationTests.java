@@ -34,7 +34,6 @@ public class ContactCreationTests extends TestBase {
 
     public static List<ContactData> contactProvider() {
         var result = new ArrayList<ContactData>();
-
         for (int i = 0; i < 5; i++) {
             result.add(new ContactData().
                     withName(randomString(i * 5)).
@@ -54,7 +53,10 @@ public class ContactCreationTests extends TestBase {
         };
         newContacts.sort(compareById);
         var expectedList = new ArrayList<>(oldContacts);
-        expectedList.add(contact.withId(newContacts.get(newContacts.size() - 1).id()).withName("").withLastName(""));
+        expectedList.add(contact
+                .withId(newContacts.get(newContacts.size() - 1).id())
+                .withName(contact.firstName())
+                .withLastName(contact.lastName()));
         expectedList.sort(compareById);
         Assertions.assertEquals(newContacts, expectedList);
     }

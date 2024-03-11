@@ -28,12 +28,14 @@ public class GroupCreationTests extends TestBase {
                 }
             }
         }
+
         for (int i = 0; i < 5; i++) {
             result.add(new GroupData().
                     withName(randomString(i * 5)).
                     withHeader(randomString(i * 5)).
                     withFooter(randomString(i * 5)));
         }
+
         return result;
     }
 
@@ -48,6 +50,7 @@ public class GroupCreationTests extends TestBase {
         };
         newGroups.sort(compareById);
         var expectedList = new ArrayList<>(oldGroups);
+
         expectedList.add(group.withId(newGroups.get(newGroups.size()-1).id()).withHeader("").withFooter(""));
         expectedList.sort(compareById);
         Assertions.assertEquals(newGroups, expectedList);
