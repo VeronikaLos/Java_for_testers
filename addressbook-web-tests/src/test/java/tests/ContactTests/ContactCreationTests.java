@@ -16,12 +16,40 @@ public class ContactCreationTests extends TestBase {
 
     @Test
     public void canCreateContactWithNameOnly() {
+        var oldContacts = app.contacts().getContactList();
         app.contacts().createContact(new ContactData().withName("Ivan"));
+        var newContacts = app.contacts().getContactList();
+        Comparator<ContactData> compareById = (o1, o2) -> {
+            return Integer.compare(Integer.parseInt(o1.id()), Integer.parseInt(o2.id()));
+        };
+        newContacts.sort(compareById);
+        System.out.println(newContacts);
+        var expectedList = new ArrayList<>(oldContacts);
+        expectedList.add(new ContactData()
+                .withId(newContacts.get(newContacts.size() - 1).id())
+                .withName("Ivan"));
+        expectedList.sort(compareById);
+        System.out.println(expectedList);
+        Assertions.assertEquals(newContacts, expectedList);
     }
 
     @Test
     public void canCreateContactWithEmptyName() {
+        var oldContacts = app.contacts().getContactList();
         app.contacts().createContact(new ContactData());
+        var newContacts = app.contacts().getContactList();
+
+        Comparator<ContactData> compareById = (o1, o2) -> {
+            return Integer.compare(Integer.parseInt(o1.id()), Integer.parseInt(o2.id()));
+        };
+        newContacts.sort(compareById);
+        System.out.println(newContacts);
+        var expectedList = new ArrayList<>(oldContacts);
+        expectedList.add(new ContactData()
+                .withId(newContacts.get(newContacts.size() - 1).id()));
+        expectedList.sort(compareById);
+        System.out.println(expectedList);
+        Assertions.assertEquals(newContacts, expectedList);
     }
 
     @Test
@@ -54,9 +82,9 @@ public class ContactCreationTests extends TestBase {
         newContacts.sort(compareById);
         var expectedList = new ArrayList<>(oldContacts);
         expectedList.add(contact
-                .withId(newContacts.get(newContacts.size() - 1).id())
-                .withName(contact.firstName())
-                .withLastName(contact.lastName()));
+                .withId(newContacts.get(newContacts.size() - 1).id()));
+//                .withName(contact.firstName())
+//                .withLastName(contact.lastName()));
         expectedList.sort(compareById);
         Assertions.assertEquals(newContacts, expectedList);
     }
