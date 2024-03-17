@@ -42,7 +42,6 @@ public class ContactCreationTests extends TestBase {
 //                .withName(contact.firstName())
 //                .withLastName(contact.lastName()));
         expectedList.sort(compareById);
-        System.out.println(expectedList);
         Assertions.assertEquals(newContacts, expectedList);
     }
 
