@@ -52,10 +52,10 @@ public class Generator {
     private Object generateGroups() {
         var result = new ArrayList<GroupData>();
         for (int i = 0; i < count; i++) {
-            result.add(new GroupData().
-                    withName(CommonFunctions.randomString(i * 5)).
-                    withHeader(CommonFunctions.randomString(i * 5)).
-                    withFooter(CommonFunctions.randomString(i * 5)));
+            result.add(new GroupData()
+                    .withName(CommonFunctions.randomString(i * 5))
+                    .withHeader(CommonFunctions.randomString(i * 5))
+                    .withFooter(CommonFunctions.randomString(i * 5)));
         }
         return result;
     }
@@ -63,9 +63,12 @@ public class Generator {
     private Object generateContacts() {
         var result = new ArrayList<ContactData>();
         for (int i = 0; i < count; i++) {
-            result.add(new ContactData().
-                    withName(CommonFunctions.randomString(i * 5)).
-                    withLastName(CommonFunctions.randomString(i * 5)));
+            result.add(new ContactData()
+                    .withFullDataUI(CommonFunctions.randomString(i * 5), CommonFunctions.randomString(i * 5), CommonFunctions.randomString(i * 5),
+                            CommonFunctions.randomString(i * 5), CommonFunctions.randomString(i * 5), CommonFunctions.randomString(i * 5),
+                            CommonFunctions.randomString(i * 5), CommonFunctions.randomString(i * 5), CommonFunctions.randomString(i * 5),
+                            CommonFunctions.randomString(i * 5), CommonFunctions.randomString(i * 5), CommonFunctions.randomString(i * 5),
+                            CommonFunctions.randomString(i * 5), CommonFunctions.randomString(i * 5), CommonFunctions.randomString(i * 5)));
         }
         return result;
     }
