@@ -1,7 +1,10 @@
 package manager;
 
 import model.ContactData;
+import model.ContactGroupData;
+import model.GroupData;
 import org.openqa.selenium.By;
+import org.openqa.selenium.support.ui.Select;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,11 +21,39 @@ public class ContactHelper extends HelperBase {
         returnHomePage();
     }
 
+    public void createContact(ContactData contact, GroupData group) {
+        openAddNewPage();
+        fillContactForm(contact);
+        selectGroup(group);
+        submitContactCreation();
+        returnHomePage();
+    }
+
+    private void selectGroup(GroupData group) {
+        new Select(manager.driver.findElement(By.name("new_group"))).selectByValue(group.id());
+    }
+
     public void removeContact(ContactData contact) {
         openHomePage();
         selectContact(contact);
         removeSelectedGroup();
         openHomePage();
+    }
+
+    public void removeContactFromGroup(ContactGroupData contactGroup) {
+        openHomePage();
+        selectGroup2(contactGroup);
+        selectContact(contactGroup);
+        removeFromGroup();
+        returnHomePage();
+    }
+
+    private void removeFromGroup() {
+        click(By.name("remove"));
+    }
+
+    private void selectGroup2(ContactGroupData group) {
+        new Select(manager.driver.findElement(By.name("group"))).selectByValue(group.groupId());
     }
 
     public void modifyContact(ContactData contact, ContactData modifiedContact) {
@@ -39,6 +70,9 @@ public class ContactHelper extends HelperBase {
     }
 
     private void selectContact(ContactData contact) {
+        click(By.cssSelector(String.format("input[value='%s']", contact.id())));
+    }
+    private void selectContact(ContactGroupData contact) {
         click(By.cssSelector(String.format("input[value='%s']", contact.id())));
     }
 
@@ -107,5 +141,15 @@ public class ContactHelper extends HelperBase {
             contacts.add(new ContactData().withId(id).withName(name).withLastName(lastName));
         }
         return contacts;
+    }
+    public List<ContactData> removeContactFromList(List<ContactData> expectedList, ContactGroupData contactGroup2) {
+        List<ContactData> toRemove = new ArrayList<>();
+        for (ContactData contact : expectedList) {
+            if (contact.id().equals(contactGroup2.id())) {
+                toRemove.add(contact);
+            }
+        }
+        expectedList.removeAll(toRemove);
+        return expectedList;
     }
 }

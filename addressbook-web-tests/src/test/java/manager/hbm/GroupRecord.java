@@ -21,6 +21,7 @@ public class GroupRecord {
 
     public Date deprecated = new Date();
 
+
     @ManyToMany
     @JoinTable(name = "address_in_groups",
             joinColumns = @JoinColumn(name = "group_id"),

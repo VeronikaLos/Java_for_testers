@@ -1,5 +1,5 @@
 package manager;
-
+import model.ContactGroupData;
 import model.GroupData;
 
 import java.sql.Driver;
@@ -16,6 +16,7 @@ public class JdbcHelper extends HelperBase {
 
     public List<GroupData> getGroupList() {
         var groups = new ArrayList<GroupData>();
+
         try (var conn = DriverManager.getConnection(
                 "jdbc:mysql://localhost/addressbook", "root", "");
              var statement = conn.createStatement();
@@ -33,5 +34,23 @@ public class JdbcHelper extends HelperBase {
             throw new RuntimeException(e);
         }
         return groups;
+    }
+    public List<ContactGroupData> getContactGroupList() {
+        var contactGroup = new ArrayList<ContactGroupData>();
+        //наполнить его записями из таблицы address_in_groups
+        try (
+                var conn = DriverManager.getConnection("jdbc:mysql://localhost/addressbook", "root", "");
+                var statement = conn.createStatement();
+                var result = statement.executeQuery("Select id, group_id from address_in_groups")) {
+            while (result.next()) {
+                contactGroup.add(new ContactGroupData()
+                        .withId(result.getString("id"))
+                        .withGroupId(result.getString("group_id")));
+            }
+        } catch (
+                SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return contactGroup;
     }
 }

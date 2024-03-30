@@ -4,6 +4,7 @@ import Common.CommonFunctions;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import model.ContactData;
+import model.GroupData;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -93,9 +94,70 @@ public class ContactCreationTests extends TestBase {
         expectedList.add(new ContactData()
                 .withId(newContacts.get(newContacts.size() - 1).id())
                 .withFullDataUI("Vasil", "Ivanovich", "Sidorov", "Vasya",
-                        "Manager", "CompanyKo", "USA","123", "222", "333", "444",
+                        "Manager", "CompanyKo", "USA", "123", "222", "333", "444",
                         "Ivan@Gmail.com", "Ivan2@Gmail.com", "Ivan3@Gmail.com", "Page"));
         expectedList.sort(compareById);
         Assertions.assertEquals(newContacts, expectedList);
+    }
+
+    @Test
+    public void canCreateContactInGroup() {
+        //создай новый контакт
+        var contact = new ContactData()
+                .withName(CommonFunctions.randomString(5))
+                .withLastName(CommonFunctions.randomString(5));
+        //Если группы нет, то создай новую
+        if (app.hbm().getGroupCount() == 0) {
+            app.hbm().createGroup(new GroupData("", "group name", "group header", "group footer"));
+        }
+        //возьми первую группу в списке
+        var group = app.hbm().getGroupList().get(0);
+
+        //Получить список контактов в заданной группе
+        var oldRelated = app.hbm().getContactsInGroup(group);
+
+        //Создать контакт в заданную группу
+        app.contacts().createContact(contact, group);
+
+        //Получить Новый список контактов в заданной группе
+        var newRelated = app.hbm().getContactsInGroup(group);
+
+        Comparator<ContactData> compareById = (o1, o2) -> {
+            return Integer.compare(Integer.parseInt(o1.id()), Integer.parseInt(o2.id()));
+        };
+        newRelated.sort(compareById);
+        var expectedList = new ArrayList<>(oldRelated);
+        expectedList.add(contact
+                .withId(newRelated.get(newRelated.size() - 1).id()));
+        expectedList.sort(compareById);
+        Assertions.assertEquals(newRelated, expectedList);
+    }
+
+    @Test
+    public void canRemoveContactFromGroup() {
+        //если нет ни одной записи в ContactGroupRecord, то создай новую группу и создай новый контакт в группу.
+        if (app.hbm().getContactGroupRecordCount() == 0) {
+            var group = new GroupData("", "group name", "group header", "group footer");
+            app.hbm().createGroup(group);
+            var contact = new ContactData()
+                    .withName(CommonFunctions.randomString(10))
+                    .withLastName(CommonFunctions.randomString(10));
+            app.contacts().createContact(contact, group);
+        }
+        //взять первую контакт-группу из списка
+        var contactGroupForRemove = app.jdbc().getContactGroupList().get(0);
+        var group = new GroupData().withId(contactGroupForRemove.groupId());
+        var oldRelated = app.hbm().getContactsInGroup(group);
+        app.contacts().removeContactFromGroup(contactGroupForRemove);
+        var newRelated = app.hbm().getContactsInGroup(group);
+        Comparator<ContactData> compareById = (o1, o2) -> {
+            return Integer.compare(Integer.parseInt(o1.id()), Integer.parseInt(o2.id()));
+        };
+        newRelated.sort(compareById);
+        List<ContactData> expectedList = new ArrayList<>(oldRelated);
+        var expectedListNew = app.contacts().removeContactFromList(expectedList,contactGroupForRemove);
+        expectedListNew.sort(compareById);
+        Assertions.assertEquals(newRelated, expectedListNew);
+        Assertions.assertEquals(oldRelated.size() -1, newRelated.size());
     }
 }

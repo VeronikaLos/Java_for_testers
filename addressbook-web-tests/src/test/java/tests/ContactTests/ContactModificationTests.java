@@ -27,6 +27,7 @@ public class ContactModificationTests extends TestBase {
                 "modified fax", "modified email", "modified email2", "modified email3", "modified page");
         app.contacts().modifyContact(oldContacts.get(index), testData);
         var newContacts = app.hbm().getContactList();
+
         var expectedList = new ArrayList<>(oldContacts);
         expectedList.set(index, testData.withId(oldContacts.get(index).id()));
         Comparator<ContactData> compareById = (o1, o2) -> {
