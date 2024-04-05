@@ -23,8 +23,8 @@ public class ContactModificationTests extends TestBase {
         var rnd = new Random();
         var index = rnd.nextInt(oldContacts.size());
         var testData = new ContactData().withFullDataUI("modified name", "modified middleName", "modified lastName", "modified nickname",
-                "modified title", "modified company", "modified address", "modified home", "modified mobile", "modified work",
-                "modified fax", "modified email", "modified email2", "modified email3", "modified page");
+                "modified title", "modified company", "modified address", "555", "666", "777",
+                "888", "modified email", "modified email2", "modified email3", "modified page");
         app.contacts().modifyContact(oldContacts.get(index), testData);
         var newContacts = app.hbm().getContactList();
 

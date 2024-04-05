@@ -131,8 +131,22 @@ public class HibernateHelper extends HelperBase {
 
     private static ContactData convert(ContactRecord record) {
         return new ContactData().withId("" + record.id)
-                .withFullDataUI(record.firstname, record.middleName, record.lastname, record.nickname, record.title, record.company, record.address,
-                        record.homeTelephone, record.mobileTelephone, record.workTelephone, record.faxTelephone, record.email, record.email2, record.email3, record.homepage);
+                .withFullDataUI(
+                        record.firstname,
+                        record.middleName,
+                        record.lastname,
+                        record.nickname,
+                        record.title,
+                        record.company,
+                        record.address,
+                        record.home,
+                        record.mobile,
+                        record.work,
+                        record.fax,
+                        record.email,
+                        record.email2,
+                        record.email3,
+                        record.homepage);
     }
     private static ContactRecord convert(ContactData data) {
         var id = data.id();
@@ -140,7 +154,7 @@ public class HibernateHelper extends HelperBase {
             id = "0";
         }
         return new ContactRecord(Integer.parseInt(id), data.firstName(), data.middleName(), data.lastName(), data.nickname(),
-                data.title(), data.company(), data.address(), data.homeTelephone(), data.mobileTelephone(), data.workTelephone(), data.faxTelephone(),
+                data.title(), data.company(), data.address(), data.home(), data.mobile(), data.work(), data.fax(),
                 data.email(), data.email2(), data.email3(), data.homePage());
     }
 

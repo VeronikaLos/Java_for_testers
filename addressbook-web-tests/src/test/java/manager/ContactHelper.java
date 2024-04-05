@@ -8,6 +8,8 @@ import org.openqa.selenium.support.ui.Select;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class ContactHelper extends HelperBase {
     public ContactHelper(ApplicationManager manager) {
@@ -72,6 +74,7 @@ public class ContactHelper extends HelperBase {
     private void selectContact(ContactData contact) {
         click(By.cssSelector(String.format("input[value='%s']", contact.id())));
     }
+
     private void selectContact(ContactGroupData contact) {
         click(By.cssSelector(String.format("input[value='%s']", contact.id())));
     }
@@ -96,10 +99,10 @@ public class ContactHelper extends HelperBase {
         type(By.name("title"), contact.title());
         type(By.name("company"), contact.company());
         type(By.name("address"), contact.address());
-        type(By.name("home"), contact.homeTelephone());
-        type(By.name("mobile"), contact.mobileTelephone());
-        type(By.name("work"), contact.workTelephone());
-        type(By.name("fax"), contact.faxTelephone());
+        type(By.name("home"), contact.home());
+        type(By.name("mobile"), contact.mobile());
+        type(By.name("work"), contact.work());
+        type(By.name("fax"), contact.fax());
         type(By.name("email"), contact.email());
         type(By.name("email2"), contact.email2());
         type(By.name("email3"), contact.email3());
@@ -142,6 +145,7 @@ public class ContactHelper extends HelperBase {
         }
         return contacts;
     }
+
     public List<ContactData> removeContactFromList(List<ContactData> expectedList, ContactGroupData contactGroup2) {
         List<ContactData> toRemove = new ArrayList<>();
         for (ContactData contact : expectedList) {
@@ -151,5 +155,56 @@ public class ContactHelper extends HelperBase {
         }
         expectedList.removeAll(toRemove);
         return expectedList;
+    }
+
+    public String getPhones(ContactData contact) {
+        return manager.driver.findElement(By.xpath(
+                        String.format("//input[@id='%s']/../../td[6]", contact.id())))
+                .getText();
+    }
+
+    public String getPhonesEditForm(ContactData contact) {
+        openHomePage();
+        initContactModification(contact);
+        var home = manager.driver.findElement(By.name("home")).getAttribute("value");
+        var mobile = manager.driver.findElement(By.name("mobile")).getAttribute("value");
+        var work = manager.driver.findElement(By.name("work")).getAttribute("value");
+
+        var phones = Stream.of(home, mobile, work)
+                .filter(s -> s != null && !"".equals(s))
+                .collect(Collectors.joining("\n"));
+        return phones;
+    }
+
+    public String getAddressEditForm(ContactData contact) {
+        openHomePage();
+        initContactModification(contact);
+        var address = manager.driver.findElement(By.name("address")).getText();
+        return address;
+    }
+
+    public String getEmailsEditForm(ContactData contact) {
+        openHomePage();
+        initContactModification(contact);
+        var home = manager.driver.findElement(By.name("email")).getAttribute("value");
+        var mobile = manager.driver.findElement(By.name("email2")).getAttribute("value");
+        var work = manager.driver.findElement(By.name("email3")).getAttribute("value");
+
+        var phones = Stream.of(home, mobile, work)
+                .filter(s -> s != null && !"".equals(s))
+                .collect(Collectors.joining("\n"));
+        return phones;
+    }
+
+    public String getAddress(ContactData contact) {
+        return manager.driver.findElement(By.xpath(
+                        String.format("//input[@id='%s']/../../td[4]", contact.id())))
+                .getText();
+    }
+
+    public String getEmails(ContactData contact) {
+        return manager.driver.findElement(By.xpath(
+                        String.format("//input[@id='%s']/../../td[5]", contact.id())))
+                .getText();
     }
 }
