@@ -207,4 +207,34 @@ public class ContactHelper extends HelperBase {
                         String.format("//input[@id='%s']/../../td[5]", contact.id())))
                 .getText();
     }
+
+    public void addContactInGroup(ContactData contact, GroupData group) {
+        openHomePage();
+        selectContact(contact);
+        selectGroupToAddContact(group);
+        addToGroup();
+        returnHomePage();
+    }
+
+    public List<ContactData> defineContact(List<ContactData> contacts, List<ContactData> contactsInGroup) {
+
+        List<ContactData> newContactsList = new ArrayList<>();
+
+        if (contacts.size() == contactsInGroup.size()) {
+            newContactsList.add(new ContactData().withName("name").withLastName("lastName"));
+        } else {
+            newContactsList = contacts;
+            newContactsList.removeAll(contactsInGroup);
+        }
+        return newContactsList;
+    }
+
+    private void addToGroup() {
+        click(By.name("add"));
+    }
+
+    private void selectGroupToAddContact(GroupData group) {
+        new Select(manager.driver.findElement(By.name("to_group"))).selectByValue(group.id());
+    }
+
 }

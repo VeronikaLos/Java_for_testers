@@ -29,7 +29,7 @@ public class ContactInfoTests extends TestBase {
                             "Manager", "CompanyKo", "USA", "123", "222", "333", "444",
                             "Ivan@Gmail.com", "Ivan2@Gmail.com", "Ivan3@Gmail.com", "Page"));
         }
-        
+
         var contacts = app.hbm().getContactList();
         var contact = contacts.get(0);
 

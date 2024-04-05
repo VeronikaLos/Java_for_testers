@@ -134,6 +134,34 @@ public class ContactCreationTests extends TestBase {
     }
 
     @Test
+    public void canAddContactInGroup() {
+        //Получить список всех контактов
+        var contacts = app.hbm().getContactList();
+
+        //взять первую группу в списке
+        var group = app.hbm().getGroupList().get(0);
+
+        //получить список контактов в этой группе
+        var contactsInGroup = app.hbm().getContactsInGroup(group);
+
+        //найти/создать контакт который не в этой группе
+        var contact = app.contacts().defineContact(contacts, contactsInGroup).get(0);
+
+        //добавить контакт в группу
+        app.contacts().addContactInGroup(contact, group);
+
+        var newContactsInGroup = app.hbm().getContactsInGroup(group);
+        Comparator<ContactData> compareById = (o1, o2) -> {
+            return Integer.compare(Integer.parseInt(o1.id()), Integer.parseInt(o2.id()));
+        };
+        newContactsInGroup.sort(compareById);
+        var expectedList = new ArrayList<>(contactsInGroup);
+        expectedList.add(contact.withId(contact.id()));
+        expectedList.sort(compareById);
+        Assertions.assertEquals(newContactsInGroup, expectedList);
+    }
+
+    @Test
     public void canRemoveContactFromGroup() {
         //если нет ни одной записи в ContactGroupRecord, то создай новую группу и создай новый контакт в группу.
         if (app.hbm().getContactGroupRecordCount() == 0) {
