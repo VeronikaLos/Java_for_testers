@@ -135,9 +135,15 @@ public class ContactCreationTests extends TestBase {
 
     @Test
     public void canAddContactInGroup() {
+        if (app.hbm().getContactCount() == 0) {
+            app.contacts().createContact(new ContactData().withName("name").withLastName("lastName"));
+        }
         //Получить список всех контактов
         var contacts = app.hbm().getContactList();
 
+        if (app.hbm().getGroupCount() == 0) {
+            app.groups().createGroup(new GroupData("", "group name", "group header", "group footer"));
+        }
         //взять первую группу в списке
         var group = app.hbm().getGroupList().get(0);
 
