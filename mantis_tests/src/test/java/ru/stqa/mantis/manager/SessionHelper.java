@@ -18,4 +18,9 @@ public class SessionHelper extends HelperBase {
     public boolean isLoggedIn() {
         return isElementPresent(By.cssSelector("span.user-info"));
     }
+
+    public void logout() {
+        click(By.xpath("//i[@class='fa fa-angle-down ace-icon']"));
+        click(By.xpath("//i[@class='fa fa-sign-out ace-icon']"));
+    }
 }
