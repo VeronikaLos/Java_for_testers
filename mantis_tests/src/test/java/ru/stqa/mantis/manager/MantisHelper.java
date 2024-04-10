@@ -17,7 +17,8 @@ public class MantisHelper extends HelperBase {
         click((By.xpath("//input[@value='Create User']")));
     }
 
-    public void changePasswordAfterRegistration() {
+    public void changePasswordAfterRegistration(String url) {
+        manager.driver().get(url);
         type(By.id("password"), "password");
         type(By.id("password-confirm"), "password");
         click((By.xpath("//*[text()='Update User']")));
