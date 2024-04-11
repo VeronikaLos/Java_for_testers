@@ -161,9 +161,11 @@ public class ContactCreationTests extends TestBase {
             return Integer.compare(Integer.parseInt(o1.id()), Integer.parseInt(o2.id()));
         };
         newContactsInGroup.sort(compareById);
+
         var expectedList = new ArrayList<>(contactsInGroup);
-        expectedList.add(contact.withId(contact.id()));
+        expectedList.add(contact);
         expectedList.sort(compareById);
+
         Assertions.assertEquals(newContactsInGroup, expectedList);
     }
 
