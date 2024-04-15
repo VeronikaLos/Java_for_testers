@@ -1,5 +1,6 @@
 package manager;
 
+import io.qameta.allure.Step;
 import manager.hbm.ContactGroupRecord;
 import manager.hbm.ContactRecord;
 import manager.hbm.GroupRecord;
@@ -56,12 +57,14 @@ public class HibernateHelper extends HelperBase {
         return new ContactGroupRecord(Integer.parseInt(data.id()), Integer.parseInt(data.groupId()));
     }
 
+    @Step
     public long getContactGroupRecordCount() {
         return (sessionFactory.fromSession(session -> {
             return session.createQuery("select count (*) from ContactGroupRecord", long.class).getSingleResult();
         }));
     }
 
+    @Step
     public List<GroupData> getGroupList() {
         return convertList(sessionFactory.fromSession(session -> {
             return session.createQuery("from GroupRecord", GroupRecord.class).list();
@@ -80,12 +83,14 @@ public class HibernateHelper extends HelperBase {
         return new GroupData(String.valueOf(record.id), record.name, record.header, record.footer);
     }
 
+    @Step
     public long getGroupCount() {
         return (sessionFactory.fromSession(session -> {
             return session.createQuery("select count (*) from GroupRecord", long.class).getSingleResult();
         }));
     }
 
+    @Step
     public void createGroup(GroupData groupData) {
         sessionFactory.inSession(session -> {
             session.getTransaction().begin();
@@ -102,11 +107,13 @@ public class HibernateHelper extends HelperBase {
         return new GroupRecord(Integer.parseInt(id), data.name(), data.header(), data.footer());
     }
 
+    @Step
     public List<ContactData> getContactList() {
         return convertContactList(sessionFactory.fromSession(session -> {
             return session.createQuery("from ContactRecord", ContactRecord.class).list();
         }));
     }
+    @Step
     public long getContactCount() {
         return (sessionFactory.fromSession(session -> {
             return session.createQuery("select count (*) from ContactRecord", long.class).getSingleResult();
@@ -158,6 +165,7 @@ public class HibernateHelper extends HelperBase {
                 data.email(), data.email2(), data.email3(), data.homePage());
     }
 
+    @Step
     public List<ContactData> getContactsInGroup(GroupData group) {
         return sessionFactory.fromSession(session -> {
             return convertContactList(session.get(GroupRecord.class, group.id()).contacts);

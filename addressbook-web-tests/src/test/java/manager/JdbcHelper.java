@@ -1,4 +1,5 @@
 package manager;
+import io.qameta.allure.Step;
 import model.ContactGroupData;
 import model.GroupData;
 
@@ -35,6 +36,8 @@ public class JdbcHelper extends HelperBase {
         }
         return groups;
     }
+
+    @Step
     public List<ContactGroupData> getContactGroupList() {
         var contactGroup = new ArrayList<ContactGroupData>();
         //наполнить его записями из таблицы address_in_groups

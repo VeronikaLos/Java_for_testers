@@ -1,5 +1,6 @@
 package manager;
 
+import io.qameta.allure.Step;
 import model.ContactData;
 import model.ContactGroupData;
 import model.GroupData;
@@ -16,6 +17,7 @@ public class ContactHelper extends HelperBase {
         super(manager);
     }
 
+    @Step
     public void createContact(ContactData contact) {
         openAddNewPage();
         fillContactForm(contact);
@@ -23,6 +25,7 @@ public class ContactHelper extends HelperBase {
         returnHomePage();
     }
 
+    @Step
     public void createContact(ContactData contact, GroupData group) {
         openAddNewPage();
         fillContactForm(contact);
@@ -32,7 +35,7 @@ public class ContactHelper extends HelperBase {
     }
 
     private void selectGroup(GroupData group) {
-        new Select(manager.driver.findElement(By.name("new_group"))).selectByValue(group.id());
+        new Select(manager.driver.findElement(By.name("new_group"))).selectByVisibleText(group.name());
     }
 
     public void removeContact(ContactData contact) {
@@ -42,12 +45,19 @@ public class ContactHelper extends HelperBase {
         openHomePage();
     }
 
+    @Step
     public void removeContactFromGroup(ContactGroupData contactGroup) {
         openHomePage();
         selectGroup2(contactGroup);
         selectContact(contactGroup);
         removeFromGroup();
         returnHomePage();
+        chooseAllGroups();
+    }
+
+    private void chooseAllGroups() {
+        click(By.name("group"));
+        click(By.xpath("//option[text()='[all]']"));
     }
 
     private void removeFromGroup() {
@@ -146,6 +156,7 @@ public class ContactHelper extends HelperBase {
         return contacts;
     }
 
+    @Step
     public List<ContactData> removeContactFromList(List<ContactData> expectedList, ContactGroupData contactGroup2) {
         List<ContactData> toRemove = new ArrayList<>();
         for (ContactData contact : expectedList) {
@@ -216,6 +227,7 @@ public class ContactHelper extends HelperBase {
         returnHomePage();
     }
 
+    @Step
     public List<ContactData> defineContact(List<ContactData> contacts, List<ContactData> contactsInGroup) {
 
         List<ContactData> newContactsList = new ArrayList<>();
