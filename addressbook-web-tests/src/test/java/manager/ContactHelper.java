@@ -227,20 +227,6 @@ public class ContactHelper extends HelperBase {
         returnHomePage();
     }
 
-    @Step
-    public List<ContactData> defineContact(List<ContactData> contacts, List<ContactData> contactsInGroup) {
-
-        List<ContactData> newContactsList = new ArrayList<>();
-
-        if (contacts.size() == contactsInGroup.size()) {
-            newContactsList.add(new ContactData().withName("name").withLastName("lastName"));
-        } else {
-            newContactsList = contacts;
-            newContactsList.removeAll(contactsInGroup);
-        }
-        return newContactsList;
-    }
-
     private void addToGroup() {
         click(By.name("add"));
     }

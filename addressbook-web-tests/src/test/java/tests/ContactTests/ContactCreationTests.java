@@ -151,7 +151,13 @@ public class ContactCreationTests extends TestBase {
         var contactsInGroup = app.hbm().getContactsInGroup(group);
 
         //найти/создать контакт который не в этой группе
-        var contact = app.contacts().defineContact(contacts, contactsInGroup).get(0);
+        List<ContactData> newContactsList = new ArrayList<>();
+        if (contacts.size() == contactsInGroup.size()) {
+            app.contacts().createContact(new ContactData().withName("name").withLastName("lastName"));
+        }
+        newContactsList = app.hbm().getContactList();;
+        newContactsList.removeAll(contactsInGroup);
+        var contact = newContactsList.get(0);
 
         //добавить контакт в группу
         app.contacts().addContactInGroup(contact, group);
@@ -164,6 +170,7 @@ public class ContactCreationTests extends TestBase {
 
         var expectedList = new ArrayList<>(contactsInGroup);
         expectedList.add(contact);
+
         expectedList.sort(compareById);
 
         Assertions.assertEquals(newContactsInGroup, expectedList);
@@ -191,9 +198,9 @@ public class ContactCreationTests extends TestBase {
         };
         newRelated.sort(compareById);
         List<ContactData> expectedList = new ArrayList<>(oldRelated);
-        var expectedListNew = app.contacts().removeContactFromList(expectedList,contactGroupForRemove);
+        var expectedListNew = app.contacts().removeContactFromList(expectedList, contactGroupForRemove);
         expectedListNew.sort(compareById);
         Assertions.assertEquals(newRelated, expectedListNew);
-        Assertions.assertEquals(oldRelated.size() -1, newRelated.size());
+        Assertions.assertEquals(oldRelated.size() - 1, newRelated.size());
     }
 }
